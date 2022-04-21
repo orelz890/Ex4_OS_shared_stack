@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "stack.hpp": "c",
+        "*.tcc": "cpp",
+        "string": "cpp",
+        "string_view": "cpp"
+    }
+}
