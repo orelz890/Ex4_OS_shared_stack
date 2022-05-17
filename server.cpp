@@ -127,35 +127,58 @@ void *creat_thread(void *newfd) {
 
     char txt_buf[MAXDATASIZE];
     string data;
+    string response;
+    bool flag;
 
     while (1){
+        flag = false;
         memset(txt_buf,0,sizeof(txt_buf));
         if (byteslen = recv(new_fd,txt_buf,sizeof(txt_buf),0) == -1)
         {
             perror("Recv txt error\n");
             break;
         }
-        cout << "txt_buf == " << txt_buf << '\n';
+        // cout << "txt_buf == " << txt_buf << '\n';
 
         if (strncmp(txt_buf, "POP", 3) == 0){
             data.clear();
+            response.clear();
             data = my_stack.pop();
             // send(new_fd,poped.c_str(),poped.length(),0);
-            cout << "Element poped:\n" << data << '\n';
+            response.append("Element poped:\n" + data);
+            cout << response << '\n';
         }
         else if (strncmp(txt_buf, "TOP", 3) == 0){
             data.clear();
+            response.clear();
             data = my_stack.top();
             // send(new_fd,top.c_str(),top.length(),0);
-            cout << "Last string in stack is:\n" << data << '\n';
+            response.append("Last string in stack is:\n" + data);
+            cout << response << '\n';
         }
         else if (strncmp(txt_buf, "PUSH", 4) == 0)
         {
             data.clear();
+            response.clear();
             data.append(txt_buf);
             my_stack.push(data.substr(5));
-            cout << "Data pushed: " << data.substr(5) << '\n';
+            response.append("Data pushed: " + data.substr(5));
+            cout << response << '\n';
         }
+        else{
+            response.clear();
+            response.append("This commend is not suported! please read the instuction..");
+        }
+        if (!response.empty())
+        {
+            int num = send(new_fd , response.c_str(), response.length(), 0);
+            if (num == -1)
+            {
+                perror("Send eror\n");
+            }
+            response.clear();
+        }
+        
     }
 
 }

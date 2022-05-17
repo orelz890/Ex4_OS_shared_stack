@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <string.h>
 #include <iostream>
@@ -6,11 +7,11 @@
 
 using namespace std;
 
+
 #define PUSH 1
 #define POP 2
 #define TOP 3
 
-pthread_mutex_t safe;
 
 class Stack{
 
@@ -18,8 +19,7 @@ class Stack{
     string* stack;
     int pos = 0;
     int stack_size;
-
-    
+    pthread_mutex_t safe_lock;
 
     public:
     Stack(){

@@ -1,6 +1,6 @@
 
-
 #include "Stack.hpp"
+#include "Memory.cpp"
 
 
 int Stack::alloc_more_space(){
@@ -23,28 +23,28 @@ bool Stack::set_stack_at(int i, string s){
 }
 
 string Stack::push(std::string data){
-    pthread_mutex_lock(&safe);
+    pthread_mutex_lock(&safe_lock);
     set_stack_at(pos++, data);
-    pthread_mutex_unlock(&safe);
+    pthread_mutex_unlock(&safe_lock);
     return data;
 }
 
 string Stack::pop(){
-    pthread_mutex_lock(&safe);
+    pthread_mutex_lock(&safe_lock);
     if (pos <= 0){
         return "Empty";
     }
     string ans = get_data_at(--pos);
     stack[pos].clear();
-    pthread_mutex_unlock(&safe);
+    pthread_mutex_unlock(&safe_lock);
     return ans;
 }
 
 string Stack::top(){
-    pthread_mutex_lock(&safe);
+    pthread_mutex_lock(&safe_lock);
     if (pos <= 0){
         return "Empty";
     }
-    pthread_mutex_unlock(&safe);
+    pthread_mutex_unlock(&safe_lock);
     return get_data_at(pos -1);
 }

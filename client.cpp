@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     buf[numbytes] = '\0';
 
     printf("client: received '%s'\n",buf);    
-    int is_sent;
+    int is_sent, received;
     char txt[1024];
 
     while(1){
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
         fflush(stdout);
         memset(txt,0,sizeof(txt));
         std::cin.getline(txt,sizeof(txt));
-        std::cout << "txt == " << txt << '\n';
+        // std::cout << "txt == " << txt << '\n';
 
         if (strncmp(txt,"EXIT",4) == 0)
         {
@@ -114,6 +114,14 @@ int main(int argc, char *argv[])
             perror("send commend error\n");
             exit(1);
         }
+        sleep(0.1);
+        memset(txt,0,sizeof(txt));
+        received = recv(sockfd,txt,sizeof(txt),0);
+        if (received == -1)
+        {
+            perror("recv error - commend response\n");
+        }
+        std::cout << txt << '\n';
 
     }
 
