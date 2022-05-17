@@ -148,7 +148,6 @@ void *creat_thread(void *newfd) {
             data = my_stack.top();
             // send(new_fd,top.c_str(),top.length(),0);
             cout << "Last string in stack is:\n" << data << '\n';
-            
         }
         else if (strncmp(txt_buf, "PUSH", 4) == 0)
         {
