@@ -2,8 +2,8 @@ all: server client
 client: client.cpp
 	g++ -o client client.cpp
 
-server: server.cpp
-	g++ -pthread -o server server.cpp
+server: server.cpp stack.cpp Stack.hpp
+	g++ -pthread -o server server.cpp stack.cpp
 
 clean:
-	rm -f *.o server client
+	rm -f *.o *.out server client

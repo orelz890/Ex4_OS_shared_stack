@@ -94,35 +94,30 @@ int main(int argc, char *argv[])
 
     printf("client: received '%s'\n",buf);    
     int is_sent;
-    std::string input_commend;
-    std::string commend;
-    std::string txt;
+    char txt[1024];
 
     while(1){
-        std::cout<< "Enter a coomend (PUSH <text>/ POP / TOP)\n";
+        std::cout<< "Enter a coomend (PUSH <text>/POP/TOP)\n";
         fflush(stdout);
-        input_commend.clear();
-        getline(std::cin,input_commend);
-        std::cout<< input_commend << '\n';
+        memset(txt,0,sizeof(txt));
+        std::cin.getline(txt,sizeof(txt));
+        std::cout << "txt == " << txt << '\n';
 
-        commend.clear();
-        commend.append(input_commend.substr(0,3));
-        std::cout << "Commend == " << commend << '\n';
-        
-        is_sent = send(sockfd, commend.c_str(),commend.length(), 0);
-        
-        if (str_comp("PUS", commend)){
-            txt.clear();
-            txt.append(input_commend.substr(3,input_commend.length()));
-            is_sent = send(sockfd, txt.c_str(),txt.length(), 0);       
-            std::cout<< "txt == " << txt << '\n';
+        if (strncmp(txt,"EXIT",4) == 0)
+        {
+            break;
         }
         
-        // else{
-        //     std::cout << '\n' << commend << " ????\n";
-        // }
+        is_sent = send(sockfd, txt,sizeof(txt), 0);
+        if (is_sent == -1)
+        {
+            perror("send commend error\n");
+            exit(1);
+        }
+
     }
 
+    
     close(sockfd);
 
     return 0;

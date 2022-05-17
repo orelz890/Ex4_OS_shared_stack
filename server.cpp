@@ -25,7 +25,7 @@
 #define MAX_COMMEND_SIZE 5
 int sockfd;  // listen on sock_fd, new connection on new_fd
 Stack my_stack;
-string current_commend;
+char current_commend[1024];
 
 void *creat_thread(void *newfd); //thread making funcation decleration 
 
@@ -117,47 +117,46 @@ int main(void)
 }
 
 void *creat_thread(void *newfd) {
-    int rv;
-    char buf[MAXDATASIZE];
-    char commend_buf[MAX_COMMEND_SIZE];
+    int byteslen;
     int new_fd = *(int*)newfd;  
     string msg = "You are a stack maneger now!\n";
     if (send(new_fd, msg.c_str() , msg.length(), 0) == -1)  {
-            perror("send");
+        perror("send");
+        exit(1);
     }
 
+    char txt_buf[MAXDATASIZE];
     string data;
-    while (1){
-        memset(commend_buf,0,sizeof(commend_buf));
-        if (rv = recv(new_fd,commend_buf,sizeof(commend_buf),0) != -1){
-            current_commend.clear();
-            current_commend.append(commend_buf);
-            cout << current_commend <<  '\n';
-            sleep(0.1);
-            fflush(stdout);
-            if (current_commend.size() > 3 && current_commend.compare("PUSH")){            
-                memset(buf,0,sizeof(buf));
-                rv = recv(new_fd,buf,sizeof(buf),0);
-                if (rv == -1){
-                    perror("Error - recv txt\n");
-                    break;
-                }
-                else{
-                    data.clear();
-                    data.append(buf);
-                    my_stack.push(data);
-                    cout << "Data pushed: " << my_stack.top() << '\n';
 
-                }
-            }
-            else if (current_commend.compare("POP")){
-                string poped = my_stack.pop();
-                cout << "Element poped:\n" << poped << '\n';
-            }
-            else if (current_commend.compare("TOP")){
-                cout << "Last string in stack is:\n" << my_stack.top() << '\n';
-            }
-            fflush(stdout);
+    while (1){
+        memset(txt_buf,0,sizeof(txt_buf));
+        if (byteslen = recv(new_fd,txt_buf,sizeof(txt_buf),0) == -1)
+        {
+            perror("Recv txt error\n");
+            break;
+        }
+        cout << "txt_buf == " << txt_buf << '\n';
+
+        if (strncmp(txt_buf, "POP", 3) == 0){
+            data.clear();
+            data = my_stack.pop();
+            // send(new_fd,poped.c_str(),poped.length(),0);
+            cout << "Element poped:\n" << data << '\n';
+        }
+        else if (strncmp(txt_buf, "TOP", 3) == 0){
+            data.clear();
+            data = my_stack.top();
+            // send(new_fd,top.c_str(),top.length(),0);
+            cout << "Last string in stack is:\n" << data << '\n';
+            
+        }
+        else if (strncmp(txt_buf, "PUSH", 4) == 0)
+        {
+            data.clear();
+            data.append(txt_buf);
+            my_stack.push(data.substr(5));
+            cout << "Data pushed: " << data.substr(5) << '\n';
         }
     }
+
 }
