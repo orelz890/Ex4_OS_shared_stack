@@ -86,8 +86,6 @@ int main()
 // ===================
 
     // Multiple pushes
-    // send_msg(sock, "PUSH do you want to hear a joke?");
-    // check_the_response(sock, "Data pushed: do you want to hear a joke?\n");
     send_msg(sock, "PUSH I");
     check_the_response(sock, "Data pushed: I\n");
     send_msg(sock, "PUSH am");
@@ -102,12 +100,6 @@ int main()
     check_the_response(sock, "Data pushed: far\n");
     send_msg(sock, "PUSH too long");
     check_the_response(sock, "Data pushed: too long\n");
-    // send_msg(sock, "PUSH i will tell you any way");
-    // check_the_response(sock, "Data pushed: i will tell you any way\n");
-    // send_msg(sock, "PUSH why do java prograammers have to wear glasses?");
-    // check_the_response(sock, "Data pushed: why do java prograammers have to wear glasses?\n");
-    // send_msg(sock, "PUSH Because they can't C#");
-    // check_the_response(sock, "Data pushed: Because they can't C#\n");
     cout << "\n\n";
 
     // Multiple pops
@@ -152,6 +144,44 @@ int main()
     send_msg(sock, "pop");
     check_the_response(sock, "This commend is not suported! please read the instuction..\n");
 
-    cout << "\nThe test was a success!!!\n"; 
+    // If we press enter by mistake
+    send_msg(sock, "");
+    check_the_response(sock, "This commend is not suported! please read the instuction..\n");
+
+    // After this the client will disconnect but the server is still open!!
+    send_msg(sock, "EXIT");
+
+    sleep(1);
+    close(sock);
+    // Let's make sure we can still reconnect:
+    sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock == -1)
+    {
+        perror("Socket failed\n");
+        exit(1);
+    }
+    
+    if (connect(sock,(struct sockaddr*)&server_address, sizeof(server_address))!= 0)
+    {
+        perror("Connect failed");
+        exit(1);
+    }
+    memset(rbuf,0,sizeof(rbuf));
+    rv = recv(sock, rbuf, sizeof(rbuf), 0);
+    if (rv == -1)
+    {
+        perror("First recv prob!");
+    }
+    
+    cout << "Begin: " << rbuf << '\n';
+    cout << "We are connected! starting the tests..\n";
+
+    send_msg(sock, "PUSH Im back!!");
+    check_the_response(sock, "Data pushed: Im back!!\n");
+
+    send_msg(sock, "EXIT");
+
+    cout << "\nThe test was a success!!\n";
+
 
 }
