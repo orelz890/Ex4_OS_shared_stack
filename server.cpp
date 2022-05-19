@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <pthread.h> // threads
 
-#include "Stack2.hpp"
+#include "Stack.hpp"
 
 #define PORT "6060"  // the port users will be connecting to
 
@@ -170,7 +170,7 @@ void *creat_thread(void *newfd) {
         }
         else if (strncmp(txt_buf, "EXIT", 4) == 0)
         {
-            cout << "A client disconnected!" << "\n";
+            cout << "A client " << (new_fd - 3) << " disconnected!" << "\n";
             close(new_fd);
             break;
 

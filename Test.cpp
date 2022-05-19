@@ -69,8 +69,8 @@ int main()
 // ===================
 
     // Multiple pushes
-    send_msg(sock, "PUSH do you want to hea a joke?");
-    check_the_response(sock, "Data pushed: do you want to hea a joke?");
+    send_msg(sock, "PUSH do you want to hear a joke?");
+    check_the_response(sock, "Data pushed: do you want to hear a joke?");
     send_msg(sock, "PUSH I will tell you any way");
     check_the_response(sock, "Data pushed: I will tell you any way");
     send_msg(sock, "PUSH why do java prograammers have to wear glasses?");
