@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <pthread.h> // threads
 
-#include "Stack.hpp"
+#include "Stack2.hpp"
 
 #define PORT "6060"  // the port users will be connecting to
 
@@ -150,6 +150,8 @@ void *creat_thread(void *newfd) {
             cout << response << '\n';
         }
         else if (strncmp(txt_buf, "TOP", 3) == 0){
+            cout << "got top req\n";
+            fflush(stdout);
             data.clear();
             response.clear();
             data = my_stack.top();
@@ -162,7 +164,7 @@ void *creat_thread(void *newfd) {
             data.clear();
             response.clear();
             data.append(txt_buf);
-            my_stack.push(data.substr(5));
+            my_stack.push(data.substr(5).c_str());
             response.append("Data pushed: " + data.substr(5));
             cout << response << '\n';
         }
@@ -171,7 +173,7 @@ void *creat_thread(void *newfd) {
             cout << "A client disconnected!" << "\n";
             close(new_fd);
             break;
-            
+
         }
         else{
             response.clear();
@@ -179,6 +181,8 @@ void *creat_thread(void *newfd) {
         }
         if (!response.empty())
         {
+            cout << "im sending response\n";
+            fflush(stdout);
             int num = send(new_fd , response.c_str(), response.length(), 0);
             if (num == -1)
             {
