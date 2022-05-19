@@ -103,16 +103,18 @@ int main(int argc, char *argv[])
         std::cin.getline(txt,sizeof(txt));
         // std::cout << "txt == " << txt << '\n';
 
-        if (strncmp(txt,"EXIT",4) == 0)
-        {
-            break;
-        }
+
         
         is_sent = send(sockfd, txt,sizeof(txt), 0);
         if (is_sent == -1)
         {
             perror("send commend error\n");
             exit(1);
+        }
+        if (strncmp(txt,"EXIT",4) == 0)
+        {
+            sleep(1);
+            break;
         }
         sleep(0.1);
         memset(txt,0,sizeof(txt));

@@ -133,7 +133,8 @@ void *creat_thread(void *newfd) {
     while (1){
         flag = false;
         memset(txt_buf,0,sizeof(txt_buf));
-        if (byteslen = recv(new_fd,txt_buf,sizeof(txt_buf),0) == -1)
+        byteslen = recv(new_fd,txt_buf,sizeof(txt_buf),0);
+        if (byteslen == -1)
         {
             perror("Recv txt error\n");
             break;
@@ -165,6 +166,13 @@ void *creat_thread(void *newfd) {
             response.append("Data pushed: " + data.substr(5));
             cout << response << '\n';
         }
+        else if (strncmp(txt_buf, "EXIT", 4) == 0)
+        {
+            cout << "A client disconnected!" << "\n";
+            close(new_fd);
+            break;
+            
+        }
         else{
             response.clear();
             response.append("This commend is not suported! please read the instuction..");
@@ -180,5 +188,5 @@ void *creat_thread(void *newfd) {
         }
         
     }
-
+    return 0;
 }
