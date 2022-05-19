@@ -146,7 +146,7 @@ void *creat_thread(void *newfd) {
             response.clear();
             data = my_stack.pop();
             // send(new_fd,poped.c_str(),poped.length(),0);
-            response.append("Element poped:\n" + data);
+            response.append("Element poped: " + data);
             cout << response << '\n';
         }
         else if (strncmp(txt_buf, "TOP", 3) == 0){
@@ -154,7 +154,7 @@ void *creat_thread(void *newfd) {
             response.clear();
             data = my_stack.top();
             // send(new_fd,top.c_str(),top.length(),0);
-            response.append("Last string in stack is:\n" + data);
+            response.append("Last string in stack is: " + data);
             cout << response << '\n';
         }
         else if (strncmp(txt_buf, "PUSH", 4) == 0)
