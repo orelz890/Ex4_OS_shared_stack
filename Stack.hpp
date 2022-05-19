@@ -62,6 +62,8 @@ class Stack{
     }
 
     ~Stack(){
+        cout << "\nfinito\n";
+        fflush(stdout);
         while (stack != NULL)
         {
             pop();
@@ -75,7 +77,7 @@ class Stack{
         return stack;
     }
     
-    pnode alloc_more_space();
+    // pnode alloc_more_space();
 
     bool push(const char t[1024]);
 

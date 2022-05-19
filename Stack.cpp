@@ -1,3 +1,5 @@
+// We were aided by this site in this part:
+// https://stackoverflow.com/questions/5422061/malloc-implementation
 
 #include "Stack.hpp"
 #include <iostream>
@@ -33,30 +35,24 @@ void my_free(void* ptr) {
     free_block_list_head.next = block;
 }
 
-pnode Stack::alloc_more_space(){
+
+bool Stack::push(const char t[1024]){
+
+    pthread_mutex_lock(&safe_lock);
     pnode new_space = (pnode)this->malloc(sizeof(node));
-    // new_space = (pnode)malloc(sizeof(node));
     memset(new_space,0,sizeof(new_space));
+
     new_space->next = NULL;
     new_space->prev = NULL;
     this->stack_size++;
-    return new_space;
-}
-
-bool Stack::push(const char t[1024]){
-    pthread_mutex_lock(&safe_lock);
-    pnode new_space = alloc_more_space();
     strcpy(new_space->txt, t);
     new_space->next = this->stack;
-
 
     if (this->stack != NULL || this->stack_size <= 0)
     {
         this->stack->prev = new_space;
     }
-    
     this->stack = new_space;
-
 
     pthread_mutex_unlock(&safe_lock);
     return 0;
@@ -75,8 +71,7 @@ string Stack::pop(){
     if (this->stack != NULL)
     {
         this->stack->prev = NULL;
-    }  
-    // free(temp);
+    }
     this->free(temp);
     this->stack_size--;
     pthread_mutex_unlock(&safe_lock);

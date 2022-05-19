@@ -139,8 +139,6 @@ void *creat_thread(void *newfd) {
             perror("Recv txt error\n");
             break;
         }
-        // cout << "txt_buf == " << txt_buf << '\n';
-
         if (strncmp(txt_buf, "POP", 3) == 0){
             data.clear();
             response.clear();
@@ -150,8 +148,6 @@ void *creat_thread(void *newfd) {
             cout << response << '\n';
         }
         else if (strncmp(txt_buf, "TOP", 3) == 0){
-            cout << "got top req\n";
-            fflush(stdout);
             data.clear();
             response.clear();
             data = my_stack.top();
@@ -170,7 +166,7 @@ void *creat_thread(void *newfd) {
         }
         else if (strncmp(txt_buf, "EXIT", 4) == 0)
         {
-            cout << "A client " << (new_fd - 3) << " disconnected!" << "\n";
+            cout << "Client " << (new_fd - 3) << " disconnected!" << "\n";
             close(new_fd);
             break;
 
@@ -181,8 +177,6 @@ void *creat_thread(void *newfd) {
         }
         if (!response.empty())
         {
-            cout << "im sending response\n";
-            fflush(stdout);
             int num = send(new_fd , response.c_str(), response.length(), 0);
             if (num == -1)
             {
