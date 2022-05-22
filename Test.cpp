@@ -1,11 +1,3 @@
-/**
- * @file Test.cpp
- * @author Ilan Gold and Haim Or Hadad
- * @brief tests 
- * @version 0.1
- * @date 2022-05-09
- * @copyright Copyright (c) 2022
- */
 
 #include <stdio.h>
 #include <sys/socket.h>
